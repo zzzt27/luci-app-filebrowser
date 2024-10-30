@@ -25,4 +25,5 @@ jobs:
         cd openwrt-sdk
         ./scripts/feeds update -a
         ./scripts/feeds install -a
+        make defconfig
         make package/luci-app-filebrowser/compile V=s
