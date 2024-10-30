@@ -16,7 +16,7 @@ jobs:
 
     - name: Setup OpenWRT SDK
       run: |
-        wget https://downloads.openwrt.org/releases/23.05.5/targets/arm64/arch/openwrt-sdk-23.05.5-armsr-armv8_gcc-12.3.0_musl.Linux-x86_64.tar.xz -O openwrt-sdk.tar.xz
+        wget https://downloads.openwrt.org/releases/23.05.5/targets/armsr/armv8/openwrt-sdk-23.05.5-armsr-armv8_gcc-12.3.0_musl.Linux-x86_64.tar.xz -O openwrt-sdk.tar.xz
         tar -xf openwrt-sdk.tar.xz
         mv openwrt-sdk-* openwrt-sdk
 
