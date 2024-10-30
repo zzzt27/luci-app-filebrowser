@@ -1,0 +1,66 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2019 [CTCGFW] Project OpenWRT
+
+. /lib/functions.sh
+. /lib/functions/procd.sh
+
+USE_PROCD=1
+
+START=99
+STOP=10
+
+init_conf() {
+    config_load "filebrowser"
+    config_get "enabled" "config" "enabled" "0"
+    config_get "port" "config" "port" "8989"
+    config_get "root_dir" "config" "root_dir" "/"
+    config_get "auth" "config" "auth" "0"
+	config_get "db_dir" "config" "db_dir" "/etc/filebrowser"
+	[ "${db_dir}" == "/" ] || db_dir="${db_dir%*/}"
+}
+
+start_service() {
+	init_conf
+	[ "${enabled}" == "1" ] || exit 0
+    logger -t filebrowser "FileBrowser Service is Enabled. Proceeding with startup."
+	procd_open_instance filebrowser
+	mkdir -p "${root_dir}"
+	mkdir -p "${db_dir}"
+    addr="0.0.0.0"
+    db_name="filebrowser.db"
+
+    if [ "$auth" == "1" ]; then
+        logger -t filebrowser "Setting auth method to noauth"
+        filebrowser -d "${db_dir}/${db_name}" config set --auth.method=noauth --shell="/bin/sh -c"
+    else
+		logger -t filebrowser "Setting auth method to json"
+        filebrowser -d "${db_dir}/${db_name}" config set --auth.method=json --shell="/bin/sh -c"
+    fi
+
+    procd_set_param command filebrowser
+    procd_append_param command -a "${addr}"
+    procd_append_param command -p "${port}"
+    procd_append_param command -r "${root_dir}"
+    procd_append_param command -d "${db_dir}/${db_name}"
+    procd_set_param respawn ${respawn_threshold:-3600} ${respawn_timeout:-5} ${respawn_retry:-5}
+    procd_close_instance
+    logger -t filebrowser "FileBrowser Service started with configuration: port=${port}, root_dir=${root_dir}, db_dir=${db_dir}"
+}
+
+
+stop_service() {
+    init_conf
+	logger -t filebrowser "FileBrowser Service is Stopped."
+    echo "${db_dir}/${db_name}" > "/lib/upgrade/keep.d/filebrowser"
+}
+
+reload_service() {
+    stop
+    start
+}
+
+service_triggers() {
+    logger -t filebrowser "procd aktif"
+    procd_add_reload_trigger "filebrowser"
+}
+

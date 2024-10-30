@@ -1,0 +1,9 @@
+
+config filebrowser 'config'
+	option enabled '1'
+	option port '9898'
+	option root_dir '/'
+	option auth '1'
+	option db_dir '/etc/filebrowser/'
+	option db_name 'filebrowser.db'
+
