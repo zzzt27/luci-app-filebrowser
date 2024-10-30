@@ -5,7 +5,7 @@ PKG_VERSION:=1.0
 PKG_RELEASE:=1
 
 LUCI_TITLE:=LuCI FileBrowser
-#LUCI_PKGARCH:=all
+LUCI_PKGARCH:=armv8
 
 include $(TOPDIR)/rules.mk
 

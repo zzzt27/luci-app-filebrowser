@@ -26,4 +26,4 @@ jobs:
         ./scripts/feeds update -a
         ./scripts/feeds install -a
         make defconfig
-        make package/luci-app-filebrowser/compile V=s Target=armv8
+        make package/luci-app-filebrowser/compile V=s Target=armsr
