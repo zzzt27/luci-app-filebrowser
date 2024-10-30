@@ -12,7 +12,7 @@ jobs:
     
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Setup OpenWRT SDK
       run: |
@@ -25,4 +25,4 @@ jobs:
         cd openwrt-sdk
         ./scripts/feeds update -a
         ./scripts/feeds install -a
-        make package/luci-app-filebrowser/compile V=s TARGET=armvirt
+        make package/luci-app-filebrowser/compile V=s

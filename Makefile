@@ -9,28 +9,28 @@ LUCI_PKGARCH:=all
 
 include $(TOPDIR)/rules.mk
 
-# Function to fetch the latest release download URL for arm64
-define LatestReleaseURL
-    $(shell curl -s https://api.github.com/repos/filebrowser/filebrowser/releases/latest | \
-    grep "browser_download_url" | \
-    grep "linux-arm64-filebrowser.tar.gz" | \
-    cut -d '"' -f 4)
-endef
+# # Function to fetch the latest release download URL for arm64
+# define LatestReleaseURL
+    # $(shell curl -s https://api.github.com/repos/filebrowser/filebrowser/releases/latest | \
+    # grep "browser_download_url" | \
+    # grep "linux-arm64-filebrowser.tar.gz" | \
+    # cut -d '"' -f 4)
+# endef
 
-PKG_SOURCE_URL:=$(call LatestReleaseURL)
-PKG_SOURCE:=linux-arm64-filebrowser.tar.gz
+# PKG_SOURCE_URL:=$(call LatestReleaseURL)
+# PKG_SOURCE:=linux-arm64-filebrowser.tar.gz
 
-define Build/Prepare
-    mkdir -p $(PKG_BUILD_DIR)
-    # Download the binary only if not already downloaded
-    [ -f $(DL_DIR)/$(PKG_SOURCE) ] || wget -O $(DL_DIR)/$(PKG_SOURCE) $(PKG_SOURCE_URL)
-    tar -xzvf $(DL_DIR)/$(PKG_SOURCE) -C $(PKG_BUILD_DIR)
-endef
+# define Build/Prepare
+    # mkdir -p $(PKG_BUILD_DIR)
+    # # Download the binary only if not already downloaded
+    # [ -f $(DL_DIR)/$(PKG_SOURCE) ] || wget -O $(DL_DIR)/$(PKG_SOURCE) $(PKG_SOURCE_URL)
+    # tar -xzvf $(DL_DIR)/$(PKG_SOURCE) -C $(PKG_BUILD_DIR)
+# endef
 
 define Package/$(PKG_NAME)/install
-    # Install LuCI files
-    $(INSTALL_DIR) $(1)/usr/bin
-    $(INSTALL_BIN) $(PKG_BUILD_DIR)/filebrowser $(1)/usr/bin/filebrowser
+    # # Install LuCI files
+    # $(INSTALL_DIR) $(1)/usr/bin
+    # $(INSTALL_BIN) $(PKG_BUILD_DIR)/filebrowser $(1)/usr/bin/filebrowser
 
     $(INSTALL_DIR) $(1)/etc/config
     $(INSTALL_DATA) ./root/etc/config/filebrowser $(1)/etc/config/filebrowser
